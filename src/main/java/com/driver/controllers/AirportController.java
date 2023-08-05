@@ -96,13 +96,12 @@ public class AirportController {
 
         //If the numberOfPassengers who have booked the flight is greater than : maxCapacity, in that case :
         //return a String "FAILURE"
-        if (passangersBooking.getOrDefault(flightId,new ArrayList<>()).size() < Flights.get(flightId).getMaxCapacity()){
+        if (passangersBooking.getOrDefault(flightId,new ArrayList<>()).size() >= Flights.get(flightId).getMaxCapacity()) return "FAILURE";
         List<Passenger> passengers = passangersBooking.getOrDefault(flightId, new ArrayList<>());
         passengers.add(passengers.get(passengerId));
         passangersBooking.put(flightId, passengers);
-    }
+
         try {
-            if (flightBookings.size() >= Flights.get(flightId).getMaxCapacity()) return "FAILURE";
             List<Flight> list = flightBookings.getOrDefault(passengerId, new ArrayList<>());
             Passenger passenger = Passengers.get(passengerId);
             //Also if the passenger has already booked a flight then also return "FAILURE".
@@ -123,8 +122,8 @@ public class AirportController {
     public String cancelATicket(@RequestParam("flightId")Integer flightId,@RequestParam("passengerId")Integer passengerId){
 
         //If the passenger has not booked a ticket for that flight or the flightId is invalid or in any other failure case
-        int cancel =0;
-        if (passangersBooking.containsKey(flightId)){
+        int cancel = 0;
+        if (!passangersBooking.containsKey(flightId)) return "FAILURE";
             List<Passenger> list = passangersBooking.get(flightId);
             for (int i = 0;i < list.size(); i++){
                 if (list.get(i).getPassengerId() == passengerId){
@@ -135,8 +134,7 @@ public class AirportController {
                     break;
                 }
             }
-        }
-       try {
+            if(!flightBookings.containsKey(passengerId))return "FAILURE";
            List<Flight> flights = flightBookings.get(passengerId);
            for (int i = 0; i< flights.size(); i++){
                if (flights.get(i).getFlightId() == flightId){
@@ -145,9 +143,6 @@ public class AirportController {
                    return "SUCCESS";
                }
            }
-       } catch (Exception e){
-           return "FAILURE";
-       }
         // then return a "FAILURE" message
         // Otherwise return a "SUCCESS" message
         // and also cancel the ticket that passenger had booked earlier on the given flightId
@@ -157,12 +152,9 @@ public class AirportController {
 
     @GetMapping("/get-count-of-bookings-done-by-a-passenger/{passengerId}")
     public int countOfBookingsDoneByPassengerAllCombined(@PathVariable("passengerId")Integer passengerId){
-        try {
-            return flightBookings.get(passengerId).size();
-        } catch (Exception e){
-            return -1;
-        }
+        if (!flightBookings.containsKey(passengerId)) return -1;
         //Tell the count of flight bookings done by a passenger: This will tell the total count of flight bookings done by a passenger :
+        return flightBookings.get(passengerId).size();
     }
 
     @PostMapping("/add-flight")
