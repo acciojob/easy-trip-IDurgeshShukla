@@ -61,9 +61,10 @@ public class AirportController {
         int count =0;
         //Calculate the total number of people who have flights on that day on a particular airport
         for (int key:Flights.keySet()) {
-            if(Flights.get(key).getFlightDate().equals(date)){
-                if ((Flights.get(key).getFromCity().name().equals(airportName) || Flights.get(key).getToCity().name().equals(airportName)))
-                count++;
+            if (passangersBooking.containsKey(key)) {
+                if (Flights.get(key).getFlightDate().equals(date) && (Flights.get(key).getFromCity().name().equals(airportName) || Flights.get(key).getToCity().name().equals(airportName))){
+                        count += passangersBooking.get(key).size();
+                }
             }
         }
         //This includes both the people who have come for a flight and who have landed on an airport after their flight
@@ -176,11 +177,8 @@ public class AirportController {
         //We need to get the starting airportName from where the flight will be taking off (Hint think of City variable if that can be of some use)
 
         //return null incase the flightId is invalid or you are not able to find the airportName
-        try {
+        if(!Flights.containsKey(flightId)) return null;
             return Flights.get(flightId).getFromCity().name();
-        }catch (Exception e){
-            return null;
-        }
     }
 
 
