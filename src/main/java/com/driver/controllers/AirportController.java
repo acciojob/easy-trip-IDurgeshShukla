@@ -40,7 +40,7 @@ public class AirportController {
         }
         //Incase of a tie return the Lexicographically smallest airportName
 
-       return largest;
+        return largest;
     }
 
     @GetMapping("/get-shortest-time-travel-between-cities")
@@ -53,7 +53,7 @@ public class AirportController {
         }
         //If there is no direct flight between 2 cities return -1.
 
-       return -1;
+        return -1;
     }
 
     @GetMapping("/get-number-of-people-on-airport-on/{date}")
@@ -63,7 +63,7 @@ public class AirportController {
         for (int key:Flights.keySet()) {
             if (passangersBooking.containsKey(key)) {
                 if (Flights.get(key).getFlightDate().equals(date) && (Flights.get(key).getFromCity().name().equals(airportName) || Flights.get(key).getToCity().name().equals(airportName))){
-                        count += passangersBooking.get(key).size();
+                    count += passangersBooking.get(key).size();
                 }
             }
         }
@@ -125,25 +125,25 @@ public class AirportController {
         //If the passenger has not booked a ticket for that flight or the flightId is invalid or in any other failure case
         int cancel = 0;
         if (!passangersBooking.containsKey(flightId)) return "FAILURE";
-            List<Passenger> list = passangersBooking.get(flightId);
-            for (int i = 0;i < list.size(); i++){
-                if (list.get(i).getPassengerId() == passengerId){
-                    list.remove(i);
-                    cancel++;
-                    passangersBooking.put(flightId,list);
-                    cancelled.put(flightId,cancel);
-                    break;
-                }
+        List<Passenger> list = passangersBooking.get(flightId);
+        for (int i = 0;i < list.size(); i++){
+            if (list.get(i).getPassengerId() == passengerId){
+                list.remove(i);
+                cancel++;
+                passangersBooking.put(flightId,list);
+                cancelled.put(flightId,cancel);
+                break;
             }
-            if(!flightBookings.containsKey(passengerId))return "FAILURE";
-           List<Flight> flights = flightBookings.get(passengerId);
-           for (int i = 0; i< flights.size(); i++){
-               if (flights.get(i).getFlightId() == flightId){
-                   flights.remove(i);
-                   flightBookings.put(passengerId,flights);
-                   return "SUCCESS";
-               }
-           }
+        }
+        if(!flightBookings.containsKey(passengerId))return "FAILURE";
+        List<Flight> flights = flightBookings.get(passengerId);
+        for (int i = 0; i< flights.size(); i++){
+            if (flights.get(i).getFlightId() == flightId){
+                flights.remove(i);
+                flightBookings.put(passengerId,flights);
+                return "SUCCESS";
+            }
+        }
         // then return a "FAILURE" message
         // Otherwise return a "SUCCESS" message
         // and also cancel the ticket that passenger had booked earlier on the given flightId
@@ -178,7 +178,7 @@ public class AirportController {
 
         //return null incase the flightId is invalid or you are not able to find the airportName
         if(!Flights.containsKey(flightId)) return null;
-            return Flights.get(flightId).getFromCity().name();
+        return Flights.get(flightId).getFromCity().name();
     }
 
 
@@ -203,7 +203,7 @@ public class AirportController {
         Passengers.put(passenger.getPassengerId(),passenger);
         //And return a "SUCCESS" message if the passenger has been added successfully.
 
-       return "SUCCESS";
+        return "SUCCESS";
     }
 
 
